@@ -1,18 +1,28 @@
-const WebSocket = require("ws");
+const express = require("express");
+const cors = require("cors");
+const { Server } = require("ws");
 
-const server = new WebSocket.Server({ port: 8080 });
+const app = express();
 
-server.on("connection", (socket) => {
+app.use(cors());
+
+const wss = new Server({ port: 8080 });
+
+wss.on("connection", (ws) => {
   console.log("Client connected.");
 
-  socket.on("message", (data) => {
-    console.log(`Received message: ${data}`);
+  ws.on("message", (message) => {
+    console.log(`Received message: ${message}`);
 
-    // echo the message back to the client
-    socket.send(data);
+    // send message back to client
+    ws.send(`Server received message: ${message}`);
   });
 
-  socket.on("close", () => {
+  ws.on("close", () => {
     console.log("Client disconnected.");
   });
+});
+
+app.listen(3000, () => {
+  console.log("Server started on port 3000.");
 });
