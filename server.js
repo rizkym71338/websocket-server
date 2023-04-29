@@ -1,10 +1,4 @@
-const express = require("express");
-const cors = require("cors");
 const { Server } = require("ws");
-
-const app = express();
-
-app.use(cors());
 
 const wss = new Server({ port: 8080 });
 
@@ -13,8 +7,6 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     console.log(`Received message: ${message}`);
-
-    // send message back to client
     ws.send(`Server received message: ${message}`);
   });
 
@@ -23,6 +15,4 @@ wss.on("connection", (ws) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server started on port 3000.");
-});
+console.log(new Date() + " Server is listening on port 8080");
